@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  repository_dispatch:
+    types: [run_build]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    # - name: Install dependencies
+    #   run: |
+    #     brew install nuget
+    #     brew cask install dotnet
+
+    - name: Prepare project
+      run: |
+        nuget restore LibOrbisPkg.sln
+        nuget restore LibOrbisPkg.Core.sln
+
+    - name: Compile project
+      run: |
+        dotnet build LibOrbisPkg.Core.sln --verbosity minimal --configuration Release
+        
