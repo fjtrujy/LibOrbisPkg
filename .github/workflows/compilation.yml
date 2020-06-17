@@ -17,11 +17,11 @@ jobs:
     #     brew install nuget
     #     brew cask install dotnet
 
-    - name: Prepare project
-      run: |
-        nuget restore LibOrbisPkg.sln
-        nuget restore LibOrbisPkg.Core.sln
-        mkdir -p release
+    # - name: Prepare project
+    #   run: |
+    #     nuget restore LibOrbisPkg.sln
+    #     nuget restore LibOrbisPkg.Core.sln
+    #     mkdir -p release
 
     - name: Compile LibOrbisPkg.Core
       run: |
