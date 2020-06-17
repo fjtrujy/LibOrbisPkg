@@ -23,11 +23,10 @@ jobs:
         nuget restore LibOrbisPkg.Core.sln
         mkdir -p release
 
-    - name: Compile project
+    - name: Compile LibOrbisPkg.Core
       run: |
-        dotnet build LibOrbisPkg.Core.sln --verbosity minimal --configuration Release
-        cp -R LibOrbisPkg.Core/bin/Release/netcoreapp3.0/. release/
-        cp -R PkgTool.Core/bin/Release/netcoreapp3.0/. release/
+        dotnet publish -c Release LibOrbisPkg.Core.sln
+        cp -R PkgTool.Core/bin/Release/netcoreapp3.0/publish/. release/
 
     - name: Get short SHA
       id: slug
@@ -39,5 +38,5 @@ jobs:
     
     - uses: actions/upload-artifact@v2
       with:
-        name: release-${{ steps.slug.outputs.sha8 }}-${{matrix.os}}
+        name: release-${{ steps.slug.outputs.sha8 }}
         path: release.tar.gz
