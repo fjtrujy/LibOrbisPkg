@@ -21,8 +21,23 @@ jobs:
       run: |
         nuget restore LibOrbisPkg.sln
         nuget restore LibOrbisPkg.Core.sln
+        mkdir -p release
 
     - name: Compile project
       run: |
         dotnet build LibOrbisPkg.Core.sln --verbosity minimal --configuration Release
-        
+        cp -R LibOrbisPkg.Core/bin/Release/netcoreapp3.0/. release/
+        cp -R PkgTool.Core/bin/Release/netcoreapp3.0/. release/
+
+    - name: Get short SHA
+      id: slug
+      run: echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
+    
+    - name: Compress release folder
+      run: |
+        tar -zcvf release.tar.gz release
+    
+    - uses: actions/upload-artifact@v2
+      with:
+        name: release-${{ steps.slug.outputs.sha8 }}-${{matrix.os}}
+        path: release.tar.gz
